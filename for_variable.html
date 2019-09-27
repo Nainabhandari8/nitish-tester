@@ -1,0 +1,56 @@
+<!DOCTYPE HTML SYSTEM "-//Adobe//DWExtension layout-engine 10.0// dialog"> <html xmlns="http://www.w3.org/1999/xhtml"> 
+<head> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+<title>Browser Variable Test</title> 
+<script type="text/javascript">
+function abcFun(arg1)
+{
+	var uri = document.getElementById("uri"); 
+    uri.value = arg1; 
+	alert(uri.value);
+}
+var browserLoad = function(e) 
+{     
+    var uri = document.getElementById("uri"); 
+    uri.value = e.currentBrowserLocation; 
+	var browser = document.getElementById("browser"); 
+	browser.getWindowObj().bridgeTextFun = abcFun;
+} 
+var promptToNavigate = function (e) 
+{ 
+} 
+function initUI() 
+{ 
+    var browser = document.getElementById("browser"); 
+    browser.addEventListener("BrowserControlBeforeNavigation", promptToNavigate, true); 
+    browser.addEventListener("BrowserControlLoad", browserLoad, true); 
+		 var configPath = dw.getConfigurationPath();
+	var htmlTempPath = configPath + "/Commands/for_variable_cef.html";
+    
+    browser.openURL(htmlTempPath);
+}  
+function loadUri() 
+{ 
+	var browser = document.getElementById("browser");
+    var uri = document.getElementById("uri"); 
+	browser.getWindowObj().DisplayText(uri.value);
+}
+function showSource(){ 
+    var browser = document.getElementById("browser"); 
+    alert(browser.getWindowObj().document.documentElement.outerHTML); 
+} 
+function commandButtons() { 
+                            return new Array( "Close", "window.close()", 
+                            "Insert Variable", "loadUri()", 
+                            "Show Source", "showSource()"
+); 
+}
+</script> 
+</head> 
+<body onLoad="initUI()"> 
+<form> 
+<p> 
+<label> 
+<input id="uri" type="text" style="width:500px"> 
+</label> 
+</p> <mm:browsercontrol id="browser" style="width:500px; height:400px;"/> </form> </body> </html>
